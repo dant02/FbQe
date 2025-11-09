@@ -1,1 +1,7 @@
-<Solution />
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="FbQe/FbQe.vcxproj" Id="3afccd5b-5d52-4a97-b4ca-5a1172675416" />
+</Solution>
