@@ -9,5 +9,9 @@
 
 // add headers that you want to pre-compile here
 #include "framework.h"
+#include "c:\\fb\include\firebird\ibase.h"
+#include "c:\\fb\include\firebird\Interface.h"
+#include "c:\\fb\include\firebird\impl\types_pub.h"
+#include "c:\\fb\include\firebird\IdlFbInterfaces.h"
 
 #endif //PCH_H

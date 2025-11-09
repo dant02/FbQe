@@ -1,13 +1,24 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
+#include "Inc.h"
 
-namespace FbQe {
-    using namespace System;
+#include <iostream>
+#include <fstream>
 
-    public ref class I18N {
-    public:
-        static DateTime GetCurrentUtcTimestamp() {
-            return DateTime::UtcNow;
-        }
-    };
+using namespace std;
+
+EXTERN_C FB_BOOLEAN* firebird_udr_plugin(IStatus* status,  FB_BOOLEAN* theirUnloadFlag, Firebird::IUdrPlugin* udrPlugin)
+{
+    ofstream myfile;
+    myfile.open("example.txt");
+    myfile << "Writing this to a file.\n";
+
+    auto fac =  new FbQe::IncFactory();
+
+    auto st = (ThrowStatusWrapper*)status;
+
+    udrPlugin->registerFunction(st, "GetInt", fac);
+
+    FB_BOOLEAN result = FB_FALSE;
+    return &result;
 }
