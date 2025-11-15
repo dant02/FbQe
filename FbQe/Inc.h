@@ -1,5 +1,6 @@
 #include "pch.h"
 
+using namespace std;
 using namespace Firebird;
 
 namespace FbQe {
@@ -16,10 +17,15 @@ namespace FbQe {
         void execute(ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg) override;
     };
 
-    class IncFactory : public Firebird::IUdrFunctionFactoryImpl<IncFactory, ThrowStatusWrapper> {
+    class IncFactory : public IUdrFunctionFactoryImpl<IncFactory, ThrowStatusWrapper> {
     public:
+        IncFactory(ostream* log);
+        ~IncFactory();
+
         void dispose() override;
         void setup(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder) override;
         IExternalFunction* newItem(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata) override;
+    private:
+        ostream* fLog;
     };
 }

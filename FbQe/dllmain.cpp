@@ -2,31 +2,31 @@
 #include "pch.h"
 #include "Inc.h"
 
-#include <iostream>
-#include <fstream>
-
 using namespace std;
 
 namespace FbQe {
 
-    bool fUnloadFlag = false;
+    FB_BOOLEAN fUnloadFlag = FB_FALSE;
+    FB_BOOLEAN* fTheirUnloadFlag;
 
-    EXTERN_C __declspec(dllexport) bool* __cdecl firebird_udr_plugin(IStatus* status, bool* theirUnloadFlag, Firebird::IUdrPlugin* udrPlugin)
+    FbQe::IncFactory* fFactory;
+    ofstream f;
+
+    EXTERN_C __declspec(dllexport) FB_BOOLEAN* __cdecl firebird_udr_plugin(IStatus* status, FB_BOOLEAN* theirUnloadFlag, Firebird::IUdrPlugin* udrPlugin)
     {
-        ofstream f;
         f.open("c:\\fb\\example.txt");
         f << "Plugin loaded.\r\n";
-
-        auto fac =  new FbQe::IncFactory();
-        auto tsw = new ThrowStatusWrapper(status);
+        fFactory = new FbQe::IncFactory(&f);
 
         f << "\r\nRegister functions";
         f.flush();
-        udrPlugin->registerFunction(tsw, "GetInt", fac);
+
+        udrPlugin->registerFunction((ThrowStatusWrapper*)status, "get_int_eks", fFactory);
 
         f << "\r\nReturn";
         f.flush();
 
+        fTheirUnloadFlag = theirUnloadFlag;
         return &fUnloadFlag;
     }
 

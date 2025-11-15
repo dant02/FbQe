@@ -11,20 +11,30 @@ namespace FbQe {
     }
 
     void IncEx::execute(Firebird::ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg)
-    {
+    {        
         auto output = (Result*)outMsg;
         output->result = 1;
+    }
+
+    IncFactory::IncFactory(ostream* aLog) {
+        this->fLog = aLog;
+    }
+
+    IncFactory::~IncFactory() {
+        this->fLog->write("remove IncFactory", 18);
+        this->fLog->flush();
     }
 
     void IncFactory::dispose()
     {
     }
 
-    void IncFactory::setup(Firebird::ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder)
+    void IncFactory::setup(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder)
     {
     }
 
-    IExternalFunction* IncFactory::newItem(Firebird::ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata)
+
+    IExternalFunction* IncFactory::newItem(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata)
     {
         return new IncEx();
     }

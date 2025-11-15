@@ -8,6 +8,7 @@
 #define PCH_H
 
 // add headers that you want to pre-compile here
+#include <fstream>
 #include "framework.h"
 #include "c:\\fb\include\firebird\ibase.h"
 #include "c:\\fb\include\firebird\Interface.h"
