@@ -7,18 +7,27 @@
 
 using namespace std;
 
-EXTERN_C FB_BOOLEAN* firebird_udr_plugin(IStatus* status,  FB_BOOLEAN* theirUnloadFlag, Firebird::IUdrPlugin* udrPlugin)
-{
-    ofstream myfile;
-    myfile.open("example.txt");
-    myfile << "Writing this to a file.\n";
+namespace FbQe {
 
-    auto fac =  new FbQe::IncFactory();
+    bool fUnloadFlag = false;
 
-    auto st = (ThrowStatusWrapper*)status;
+    EXTERN_C __declspec(dllexport) bool* __cdecl firebird_udr_plugin(IStatus* status, bool* theirUnloadFlag, Firebird::IUdrPlugin* udrPlugin)
+    {
+        ofstream f;
+        f.open("c:\\fb\\example.txt");
+        f << "Plugin loaded.\r\n";
 
-    udrPlugin->registerFunction(st, "GetInt", fac);
+        auto fac =  new FbQe::IncFactory();
+        auto tsw = new ThrowStatusWrapper(status);
 
-    FB_BOOLEAN result = FB_FALSE;
-    return &result;
+        f << "\r\nRegister functions";
+        f.flush();
+        udrPlugin->registerFunction(tsw, "GetInt", fac);
+
+        f << "\r\nReturn";
+        f.flush();
+
+        return &fUnloadFlag;
+    }
+
 }
