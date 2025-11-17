@@ -7,7 +7,10 @@
 #ifndef PCH_H
 #define PCH_H
 
+#define _CRT_SECURE_NO_WARNINGS
+
 // add headers that you want to pre-compile here
+#include <chrono>
 #include <fstream>
 #include "framework.h"
 #include "c:\\fb\include\firebird\ibase.h"
