@@ -9,11 +9,13 @@ namespace FbQe {
 
     void Log::write_line(std::string aMessage) {
         auto f = &(this->fStream);
-        *f << "\r\n" << time_now() << "\t" << aMessage;
+        *f << "\r\n";
+        write_time_now();
+        *f << "\t" << aMessage;
         f->flush();
     }
 
-    std::string Log::time_now() {
+    void Log::write_time_now() {
         // based on answer
         // https://stackoverflow.com/questions/16077299/how-to-print-current-time-with-milliseconds-using-c-c11/66291527#66291527
         using namespace std::chrono;
@@ -25,8 +27,7 @@ namespace FbQe {
         const auto current_time_since_epoch{ current_time_point.time_since_epoch() };
         const auto current_milliseconds{ duration_cast<milliseconds> (current_time_since_epoch).count() % 1000 };
 
-        std::ostringstream stream;
-        stream << std::put_time(&current_localtime, "%F %T") << "." << std::setw(3) << std::setfill('0') << current_milliseconds;
-        return stream.str();
+        auto f = &(this->fStream);
+        *f << std::put_time(&current_localtime, "%F %T") << "." << std::setw(3) << std::setfill('0') << current_milliseconds;
     }
 }

@@ -5,8 +5,8 @@ namespace FbQe {
     public:
         Log();
         void write_line(std::string aMessage);
-        std::string time_now();
     private:
         std::ofstream fStream;
+        void write_time_now();
     };
 }
