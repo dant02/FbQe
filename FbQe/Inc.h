@@ -6,13 +6,13 @@ using namespace Firebird;
 
 namespace FbQe {
     struct Result {
-        int Result;
-        bool resultNull;
+        int R;
+        short RNull;
     };
 
     struct Input {
         int val;
-        bool valNull;
+        short valNull;
     };
 
     class IncEx : public IExternalFunctionImpl<IncEx, ThrowStatusWrapper> {

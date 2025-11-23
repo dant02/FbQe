@@ -20,11 +20,9 @@ namespace FbQe {
 
     void IncEx::execute(Firebird::ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg) {
         this->fL->write_line("IncEx.execute");
-
-        auto input = (Input*)inMsg;
-        auto output = (Result*)outMsg;
-        output->resultNull = input->valNull;
-        output->Result = 1;
+        auto output = (struct Result*)outMsg;
+        output->RNull = 0;
+        output->R = 1;
     }
 
     IncFactory::IncFactory(Log* aLog) {
@@ -41,8 +39,6 @@ namespace FbQe {
 
     void IncFactory::setup(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder) {
         this->fL->write_line("IncFactory.setup");
-        auto output = metadata->getOutputMetadata(status);
-        output->getCount(status);
     }
 
     IExternalFunction* IncFactory::newItem(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata) {
