@@ -2,40 +2,51 @@
 #include "Inc.h"
 
 namespace FbQe {
-    void IncEx::dispose()
-    {
+    IncEx::IncEx(Log* aLog) {
+        this->fL = aLog;
     }
 
-    void IncEx::getCharSet(Firebird::ThrowStatusWrapper* status, IExternalContext* context, char* name, unsigned nameSize)
-    {
+    IncEx::~IncEx() {
+        this->fL->write_line("remove IncEx");
     }
 
-    void IncEx::execute(Firebird::ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg)
-    {        
+    void IncEx::dispose() {
+        this->fL->write_line("IncEx.dispose");
+    }
+
+    void IncEx::getCharSet(Firebird::ThrowStatusWrapper* status, IExternalContext* context, char* name, unsigned nameSize) {
+        this->fL->write_line("IncEx.getCharSet");
+    }
+
+    void IncEx::execute(Firebird::ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg) {
+        this->fL->write_line("IncEx.execute");
+
+        auto input = (Input*)inMsg;
         auto output = (Result*)outMsg;
-        output->result = 1;
+        output->resultNull = input->valNull;
+        output->Result = 1;
     }
 
-    IncFactory::IncFactory(ostream* aLog) {
-        this->fLog = aLog;
+    IncFactory::IncFactory(Log* aLog) {
+        this->fL = aLog;
     }
 
     IncFactory::~IncFactory() {
-        this->fLog->write("remove IncFactory", 18);
-        this->fLog->flush();
+        this->fL->write_line("remove IncFactory");
     }
 
-    void IncFactory::dispose()
-    {
+    void IncFactory::dispose() {
+        this->fL->write_line("IncFactory.dispose");
     }
 
-    void IncFactory::setup(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder)
-    {
+    void IncFactory::setup(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder) {
+        this->fL->write_line("IncFactory.setup");
+        auto output = metadata->getOutputMetadata(status);
+        output->getCount(status);
     }
 
-
-    IExternalFunction* IncFactory::newItem(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata)
-    {
-        return new IncEx();
+    IExternalFunction* IncFactory::newItem(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata) {
+        this->fL->write_line("IncFactory.newItem");
+        return new IncEx(this->fL);
     }
 }
