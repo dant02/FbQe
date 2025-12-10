@@ -38,11 +38,19 @@ namespace FbQe {
         DbNullFlag RNull;
     };
 
-    class GetCurrentTimestampUTC {
-
+    class GetCurrentTimestampUTC : public IExternalFunctionImpl<GetCurrentTimestampUTC, ThrowStatusWrapper> {
+    public:
+        explicit GetCurrentTimestampUTC() = default;
+        void dispose() override;
+        void getCharSet(ThrowStatusWrapper* status, IExternalContext* context, char* name, unsigned nameSize) override;
+        void execute(ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg) override;
     };
 
-    class GetCurrentTimestampUTC_Factory {
-
+    class GetCurrentTimestampUTC_Factory : public IUdrFunctionFactoryImpl<GetCurrentTimestampUTC_Factory, ThrowStatusWrapper> {
+    public:
+        explicit GetCurrentTimestampUTC_Factory() = default;
+        void dispose() override;
+        void setup(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder) override;
+        IExternalFunction* newItem(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata) override;
     };
 }

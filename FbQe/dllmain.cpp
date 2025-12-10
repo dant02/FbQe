@@ -8,18 +8,23 @@ namespace FbQe {
     FB_BOOLEAN* fTheirUnloadFlag;
 
     Log* l;
-    IncFactory* fFactory;
+    std::unique_ptr<IncFactory> fFactory;
+    std::unique_ptr<GetCurrentTimestampUTC_Factory> fGetCurrentTimestampUTC;
 
     extern "C" __declspec(dllexport) FB_BOOLEAN* __cdecl firebird_udr_plugin(IStatus* status, FB_BOOLEAN* theirUnloadFlag, Firebird::IUdrPlugin* udrPlugin) {
         l = new Log();
         l->write_line("Plugin init");
-        fFactory = new IncFactory(l);
+
+        fFactory = make_unique<IncFactory>(l);
+        fGetCurrentTimestampUTC = make_unique<GetCurrentTimestampUTC_Factory>();
 
         l->write_line("Register functions");
-        udrPlugin->registerFunction((ThrowStatusWrapper*)status, "get_int_eks", fFactory);
+        udrPlugin->registerFunction((ThrowStatusWrapper*)status, "get_int_eks", fFactory.get());
+        udrPlugin->registerFunction((ThrowStatusWrapper*)status, "GetCurrentTimestampUTC", fGetCurrentTimestampUTC.get());
         fTheirUnloadFlag = theirUnloadFlag;
 
         l->write_line("Plugin init end");
         return &fUnloadFlag;
     }
 }
+

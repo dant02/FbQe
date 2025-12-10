@@ -45,4 +45,33 @@ namespace FbQe {
         this->fL->write_line("IncFactory.newItem");
         return new IncEx(this->fL);
     }
+
+    //// GetCurrentTimestampUTC
+
+    void GetCurrentTimestampUTC::dispose() {
+        // what to add ?
+    }
+
+    void GetCurrentTimestampUTC::getCharSet(Firebird::ThrowStatusWrapper* status, IExternalContext* context, char* name, unsigned nameSize) {
+        // what to add ?
+    }
+
+    void GetCurrentTimestampUTC::execute(Firebird::ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg) {
+        auto output = (struct TimestampResult*)outMsg;
+        output->RNull = 0;
+        output->R.timestamp_date = 0;
+        output->R.timestamp_time = 0;
+    }
+
+    void GetCurrentTimestampUTC_Factory::dispose() {
+        // what to add ?
+    }
+
+    void GetCurrentTimestampUTC_Factory::setup(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder) {
+        // what to add ?
+    }
+
+    IExternalFunction* GetCurrentTimestampUTC_Factory::newItem(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata) {
+        return new GetCurrentTimestampUTC();
+    }
 }
