@@ -1,18 +1,14 @@
+#pragma once
 #include "pch.h"
 #include "log.h"
 
-using namespace std;
-using namespace Firebird;
-
 namespace FbQe {
+    using namespace std;
+    using namespace Firebird;
+
     struct Result {
         int R;
-        short RNull;
-    };
-
-    struct Input {
-        int val;
-        short valNull;
+        DbNullFlag RNull;
     };
 
     class IncEx : public IExternalFunctionImpl<IncEx, ThrowStatusWrapper> {
@@ -28,12 +24,25 @@ namespace FbQe {
 
     class IncFactory : public IUdrFunctionFactoryImpl<IncFactory, ThrowStatusWrapper> {
     public:
-        IncFactory(Log* aLog);
-        ~IncFactory();
+        explicit IncFactory(Log* aLog);
+        ~IncFactory() final;
         void dispose() override;
         void setup(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder) override;
         IExternalFunction* newItem(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata) override;
     private:
         Log* fL;
+    };
+
+    struct TimestampResult {
+        ISC_TIMESTAMP R;
+        DbNullFlag RNull;
+    };
+
+    class GetCurrentTimestampUTC {
+
+    };
+
+    class GetCurrentTimestampUTC_Factory {
+
     };
 }

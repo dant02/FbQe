@@ -15,9 +15,6 @@ namespace FbQe {
         l->write_line("Plugin init");
         fFactory = new IncFactory(l);
 
-        l->write_line(std::format("size int: {}", sizeof(int)));
-        l->write_line(std::format("size long: {}", sizeof(long)));
-
         l->write_line("Register functions");
         udrPlugin->registerFunction((ThrowStatusWrapper*)status, "get_int_eks", fFactory);
         fTheirUnloadFlag = theirUnloadFlag;

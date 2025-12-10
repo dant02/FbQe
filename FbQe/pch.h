@@ -18,4 +18,7 @@
 #include "c:\\fb\include\firebird\impl\types_pub.h"
 #include "c:\\fb\include\firebird\IdlFbInterfaces.h"
 
+typedef short DbNullFlag;
+const short IsDbNull = -1;
+
 #endif //PCH_H
