@@ -60,14 +60,14 @@ namespace FbQe {
     }
 
     void GetCurrentTimestampUTC_Factory::dispose() {
-        // what to add ?
+        this->fFunction.reset();
     }
 
     void GetCurrentTimestampUTC_Factory::setup(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder) {
-        // what to add ?
+        this->fFunction = make_unique<GetCurrentTimestampUTC>();
     }
 
     IExternalFunction* GetCurrentTimestampUTC_Factory::newItem(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata) {
-        return new GetCurrentTimestampUTC();
+        return this->fFunction.get();
     }
 }
