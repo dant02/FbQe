@@ -13,24 +13,20 @@ namespace FbQe {
 
     class IncEx : public IExternalFunctionImpl<IncEx, ThrowStatusWrapper> {
     public:
-        IncEx(Log* aLog);
+        IncEx();
         ~IncEx();
         void dispose() override;
         void getCharSet(ThrowStatusWrapper* status, IExternalContext* context, char* name, unsigned nameSize) override;
         void execute(ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg) override;
-    private:
-        Log* fL;
     };
 
     class IncFactory : public IUdrFunctionFactoryImpl<IncFactory, ThrowStatusWrapper> {
     public:
-        explicit IncFactory(Log* aLog);
+        explicit IncFactory();
         ~IncFactory() final;
         void dispose() override;
         void setup(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder) override;
         IExternalFunction* newItem(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata) override;
-    private:
-        Log* fL;
     };
 
     struct TimestampResult {
@@ -44,6 +40,8 @@ namespace FbQe {
         void dispose() override;
         void getCharSet(ThrowStatusWrapper* status, IExternalContext* context, char* name, unsigned nameSize) override;
         void execute(ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg) override;
+    private:
+        const long long MICROSECONDS_IN_DAY = 86400000000; // 24LL * 60LL * 60LL * 1000LL * 1000LL
     };
 
     class GetCurrentTimestampUTC_Factory : public IUdrFunctionFactoryImpl<GetCurrentTimestampUTC_Factory, ThrowStatusWrapper> {

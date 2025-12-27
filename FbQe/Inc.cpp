@@ -1,49 +1,40 @@
 #include "pch.h"
 #include "Inc.h"
+#include <ctime>
 
 namespace FbQe {
-    IncEx::IncEx(Log* aLog) {
-        this->fL = aLog;
+    IncEx::IncEx() {
     }
 
     IncEx::~IncEx() {
-        this->fL->write_line("remove IncEx");
     }
 
     void IncEx::dispose() {
-        this->fL->write_line("IncEx.dispose");
     }
 
     void IncEx::getCharSet(Firebird::ThrowStatusWrapper* status, IExternalContext* context, char* name, unsigned nameSize) {
-        this->fL->write_line("IncEx.getCharSet");
     }
 
     void IncEx::execute(Firebird::ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg) {
-        this->fL->write_line("IncEx.execute");
         auto output = (struct Result*)outMsg;
         output->RNull = 0;
         output->R = 1;
     }
 
-    IncFactory::IncFactory(Log* aLog) {
-        this->fL = aLog;
+    IncFactory::IncFactory() {
     }
 
     IncFactory::~IncFactory() {
-        this->fL->write_line("remove IncFactory");
     }
 
     void IncFactory::dispose() {
-        this->fL->write_line("IncFactory.dispose");
     }
 
     void IncFactory::setup(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata, IMetadataBuilder* inBuilder, IMetadataBuilder* outBuilder) {
-        this->fL->write_line("IncFactory.setup");
     }
 
     IExternalFunction* IncFactory::newItem(ThrowStatusWrapper* status, IExternalContext* context, IRoutineMetadata* metadata) {
-        this->fL->write_line("IncFactory.newItem");
-        return new IncEx(this->fL);
+        return new IncEx();
     }
 
     //// GetCurrentTimestampUTC
@@ -57,10 +48,15 @@ namespace FbQe {
     }
 
     void GetCurrentTimestampUTC::execute(Firebird::ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg) {
+        using namespace std::chrono;
+        const duration utc_now = system_clock::now().time_since_epoch();                  // depends on system clock to be UTC
+        const int64_t utc_now_탎 = duration_cast<microseconds>(utc_now).count();
+        const int64_t utc_time_of_day_탎 = utc_now_탎 % MICROSECONDS_IN_DAY;
+        const int64_t utc_date_days = (utc_now_탎 - utc_time_of_day_탎) / MICROSECONDS_IN_DAY;
         auto output = (struct TimestampResult*)outMsg;
         output->RNull = 0;
-        output->R.timestamp_date = 0;
-        output->R.timestamp_time = 0;
+        output->R.timestamp_date = (int)utc_date_days + 40587;                            // Win11,2025: add day difference of system clock epoch and Firebird SQL epoch
+        output->R.timestamp_time = (unsigned int)(utc_time_of_day_탎 / 100);
     }
 
     void GetCurrentTimestampUTC_Factory::dispose() {
