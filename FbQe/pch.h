@@ -13,10 +13,10 @@
 #include <chrono>
 #include <fstream>
 #include "framework.h"
-#include "c:\\fb\include\firebird\ibase.h"
-#include "c:\\fb\include\firebird\Interface.h"
-#include "c:\\fb\include\firebird\impl\types_pub.h"
-#include "c:\\fb\include\firebird\IdlFbInterfaces.h"
+#include "..\.fb\src\include\firebird\ibase.h"
+#include "..\.fb\src\include\firebird\Interface.h"
+#include "..\.fb\src\include\firebird\impl\types_pub.h"
+#include "..\.fb\src\include\firebird\IdlFbInterfaces.h"
 
 typedef short DbNullFlag;
 const short IsDbNull = -1;
