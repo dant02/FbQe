@@ -48,15 +48,11 @@ namespace FbQe {
     }
 
     void GetCurrentTimestampUTC::execute(Firebird::ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg) {
-        using namespace std::chrono;
-        const duration utc_now = system_clock::now().time_since_epoch();                  // depends on system clock to be UTC
-        const int64_t utc_now_탎 = duration_cast<microseconds>(utc_now).count();
-        const int64_t utc_time_of_day_탎 = utc_now_탎 % MICROSECONDS_IN_DAY;
-        const int64_t utc_date_days = (utc_now_탎 - utc_time_of_day_탎) / MICROSECONDS_IN_DAY;
+        auto utcNow = System::DateTime::UtcNow;
         auto output = (struct TimestampResult*)outMsg;
         output->RNull = 0;
-        output->R.timestamp_date = (int)utc_date_days + 40587;                            // Win11,2025: add day difference of system clock epoch and Firebird SQL epoch
-        output->R.timestamp_time = (unsigned int)(utc_time_of_day_탎 / 100);
+        output->R.timestamp_date = (int)utcNow.Subtract(fFirebirdEpoch).TotalDays;
+        output->R.timestamp_time = (unsigned int)(utcNow.TimeOfDay.TotalMicroseconds / 100);
     }
 
     void GetCurrentTimestampUTC_Factory::dispose() {

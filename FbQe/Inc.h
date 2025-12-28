@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "log.h"
+#include <msclr/gcroot.h>
 
 namespace FbQe {
     using namespace std;
@@ -41,7 +42,7 @@ namespace FbQe {
         void getCharSet(ThrowStatusWrapper* status, IExternalContext* context, char* name, unsigned nameSize) override;
         void execute(ThrowStatusWrapper* status, IExternalContext* context, void* inMsg, void* outMsg) override;
     private:
-        const int64_t MICROSECONDS_IN_DAY = 86400000000; // 24LL * 60LL * 60LL * 1000LL * 1000LL
+        const msclr::gcroot<System::DateTime> fFirebirdEpoch = System::DateTime(1858, 11, 17, 0, 0, 0);
     };
 
     class GetCurrentTimestampUTC_Factory : public IUdrFunctionFactoryImpl<GetCurrentTimestampUTC_Factory, ThrowStatusWrapper> {
