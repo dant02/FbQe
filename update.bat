@@ -20,3 +20,5 @@ ECHO "Starting service..."
 SC START FirebirdServerDefaultInstance
 
 XCOPY x64\%1\fbqe.dll c:\fb\plugins\udr /Y
+XCOPY x64\%1\Ijwhost.dll c:\fb\plugins\udr /Y
+XCOPY x64\%1\FbQe.runtimeconfig.json c:\fb\plugins\udr /Y
