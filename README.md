@@ -2,6 +2,8 @@
 
 Firebird SQL plugin, https://www.firebirdsql.org
 
+[![MSBuild](https://github.com/dant02/FbQe/actions/workflows/msbuild.yml/badge.svg)](https://github.com/dant02/FbQe/actions/workflows/msbuild.yml)
+
 ## Contents of the plugin
 
 ### Functions
