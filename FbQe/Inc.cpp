@@ -40,7 +40,7 @@ namespace FbQe {
     //// GetCurrentTimestampUTC
 
     void GetCurrentTimestampUTC::dispose() {
-        // what to add ?
+        // No action required: the factory owns this instance via unique_ptr.
     }
 
     void GetCurrentTimestampUTC::getCharSet(Firebird::ThrowStatusWrapper* status, IExternalContext* context, char* name, unsigned nameSize) {
