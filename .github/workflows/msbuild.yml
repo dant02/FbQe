@@ -28,17 +28,34 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Setup pinned .NET 8 SDK
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: '8.0.419'
 
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
-      with:
-        vs-version: '17.0'
+      shell: pwsh
+      run: |
+        $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+        if (-not (Test-Path $vswhere)) {
+          throw "vswhere.exe was not found at $vswhere"
+        }
+
+        $msbuildPath = & $vswhere `
+          -latest `
+          -version "[17.0,18.0)" `
+          -requires Microsoft.Component.MSBuild `
+          -find MSBuild\**\Bin\MSBuild.exe | Select-Object -First 1
+
+        if (-not $msbuildPath) {
+          throw "MSBuild.exe was not found by vswhere"
+        }
+
+        $msbuildDir = Split-Path $msbuildPath -Parent
+        "Using MSBuild from: $msbuildPath"
+        $msbuildDir | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     - name: Show .NET environment
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -61,7 +78,7 @@ jobs:
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: x64_release
         path: |
