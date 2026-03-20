@@ -416,3 +416,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Local Firebird source clones used for headers/build support
+.fb/
+fb/
