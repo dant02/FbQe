@@ -51,6 +51,8 @@ To build and use this project locally, you will typically need:
 - .NET 8 SDK for the test project
 - Access to Git to clone the Firebird source headers used by the C++ project
 
+The repository pins the .NET SDK version in `global.json`. At the time of writing, the pinned SDK is `8.0.419`.
+
 ## Build setup
 
 The native project includes Firebird header files from a local `.fb` folder.
@@ -76,6 +78,8 @@ Or build from the command line with MSBuild:
 ```bat
 msbuild /m /p:Configuration=Release .
 ```
+
+The CI workflow installs the same pinned .NET SDK version before restore and build to keep local and CI behavior consistent.
 
 Typical release outputs are created under:
 
@@ -131,6 +135,8 @@ See:
 ## Continuous integration
 
 GitHub Actions builds the project on Windows using the workflow in `.github/workflows/msbuild.yml`.
+
+The workflow explicitly installs .NET SDK `8.0.419` to avoid unexpected runner changes affecting the `net8.0` test project.
 
 ## License
 
