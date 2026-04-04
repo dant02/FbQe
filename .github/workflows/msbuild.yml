@@ -62,6 +62,20 @@ jobs:
         $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
         & $vswhere -all -prerelease
 
+    - name: List Visual Studio MSBuild candidates
+      shell: pwsh
+      run: |
+        $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+        if (-not (Test-Path $vswhere)) {
+          throw "vswhere.exe was not found at $vswhere"
+        }
+
+        Write-Host "Visual Studio installations:"
+        & $vswhere -all -prerelease -format json
+
+        Write-Host "MSBuild candidates:"
+        & $vswhere -all -prerelease -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe
+
     - name: Show .NET environment
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
