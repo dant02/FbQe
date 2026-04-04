@@ -76,8 +76,10 @@ FbQe.slnx
 Or build from the command line with MSBuild:
 
 ```bat
-msbuild /m /p:Configuration=Release .
+msbuild /m /p:Configuration=Release /p:Platform=x64 .
 ```
+
+The GitHub Actions workflow builds the `Release|x64` configuration only. The command above matches the CI build configuration.
 
 The CI workflow installs the same pinned .NET SDK version before restore and build to keep local and CI behavior consistent.
 
@@ -137,6 +139,8 @@ See:
 GitHub Actions builds the project on Windows using the workflow in `.github/workflows/msbuild.yml`.
 
 The workflow explicitly installs .NET SDK `8.0.419` to avoid unexpected runner changes affecting the `net8.0` test project.
+It currently validates `Release|x64` only and uploads artifacts from `x64\Release\`.
+Debug builds are intended for local development and are not validated by CI.
 
 ## License
 
